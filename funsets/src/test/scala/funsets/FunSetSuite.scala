@@ -146,4 +146,38 @@ class FunSetSuite extends FunSuite {
       assert(!contains(f2, 4))
     }
   }
+
+  test("forall returns true when all match predicate") {
+    new TestSets {
+      val fa = forall(x => true, y => y%1 == 0)
+      assert(fa)
+    }
+  }
+
+  test("forall returns false if one does not match predicate") {
+    val fa = forall(x => true, y => y%2 == 0)
+    assert(!fa)
+  }
+
+  test("should handle negative numbers") {
+    val fa = forall(x => true, y => y > 0)
+    assert(!fa) 
+  }
+
+  test("exists should be true when item exists") {
+    var doesExist = exists(x => true, y => y == 100)
+    assert(doesExist)
+  }
+
+  test ("exists should be false when item does not exist") {
+    var doesNotExist = exists(x => true, y => y + 1 == 5000)
+    assert(!doesNotExist)
+  }
+
+  test("map should map") {
+    new TestSets {
+      val mapped = map(s2, x => x*x)
+      assert(contains(mapped, 4))
+    }
+  }
 }
