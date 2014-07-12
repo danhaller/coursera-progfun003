@@ -238,7 +238,6 @@ object Huffman {
   def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
     def encodeText(text: List[Char]) : List[Bit] = {
       def traverse(subtree: CodeTree, accumulated: List[Bit]) : List[Bit] = {
-        println(accumulated)
         if (text.isEmpty) List()
         else {
           subtree match {
@@ -264,7 +263,15 @@ object Huffman {
    * This function returns the bit sequence that represents the character `char` in
    * the code table `table`.
    */
-  def codeBits(table: CodeTable)(char: Char): List[Bit] = ???
+  def codeBits(table: CodeTable)(char: Char): List[Bit] = {
+    def find(table: CodeTable, char: Char) : List[Bit] = {
+      table match {
+        case (chr, bits) :: tail => if (char == chr) bits else find(tail, char)
+      }
+    }
+
+    find (table, char)
+  }
 
   /**
    * Given a code tree, create a code table which contains, for every character in the

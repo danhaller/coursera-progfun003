@@ -71,4 +71,8 @@ class HuffmanSuite extends FunSuite {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
+
+  test("code bits") {
+    assert(codeBits(List[(Char, List[Bit])](('a', List(1,1,1)), ('b', List(0,0,0))))('b') === List(0,0,0))
+  }
 }
