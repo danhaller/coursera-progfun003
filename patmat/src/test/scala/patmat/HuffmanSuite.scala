@@ -52,7 +52,17 @@ class HuffmanSuite extends FunSuite {
     new TestTrees {
       assert(decode(t2, List[Bit](0,0,0)) === "a".toList)
       assert(decode(t2, List[Bit](1,0)) === "d".toList)
-      assert(decode(t2, List[Bit](1,0,0,0,0)) === "da".toList)
+      assert(decode(t1, List[Bit](0)) === "a".toList)
+      assert(decode(t1, List[Bit](1)) === "b".toList)
+      assert(decode(t1, List[Bit](0,1)) === "ab".toList)
+    }
+  }
+
+  test("encode") {
+    new TestTrees {
+      assert(encode(t2)(string2Chars("a")) === List(0,0))
+      assert(encode(t2)(string2Chars("b")) === List(0,1))
+      assert(encode(t1)(string2Chars("ab")) === List(0,1))
     }
   }
 
