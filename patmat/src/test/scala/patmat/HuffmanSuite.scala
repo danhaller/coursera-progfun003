@@ -81,4 +81,12 @@ class HuffmanSuite extends FunSuite {
         assert(convert(t1) === List[(Char, List[Bit])](('a', List(0)), ('b', List(1))))
       }
   }
+
+  test ("quick encode") {
+    new TestTrees {
+      assert(quickEncode(t2)(string2Chars("a")) === List(0,0))
+      assert(quickEncode(t2)(string2Chars("b")) === List(0,1))
+      assert(quickEncode(t1)(string2Chars("ab")) === List(0,1))
+    }
+  }
 }

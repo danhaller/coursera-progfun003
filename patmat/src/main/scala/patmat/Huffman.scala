@@ -307,5 +307,17 @@ object Huffman {
    * To speed up the encoding process, it first converts the code tree to a code table
    * and then uses it to perform the actual encoding.
    */
-  def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+    def quick(table: CodeTable, text: List[Char]) : List[Bit]= {
+      if (text.isEmpty) List[Bit]()
+      else {
+        table match {
+          case Nil => List[Bit]()
+          case (chr, bits) :: tail => if (text.head == chr) bits ::: quick(table, text.tail) else quick(tail, text)
+        }
+      }
+    }
+
+    quick(convert(tree), text)
+  }
 }
