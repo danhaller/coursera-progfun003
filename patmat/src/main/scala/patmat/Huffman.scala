@@ -266,6 +266,7 @@ object Huffman {
   def codeBits(table: CodeTable)(char: Char): List[Bit] = {
     def find(table: CodeTable, char: Char) : List[Bit] = {
       table match {
+        case Nil => List[Bit]()
         case (chr, bits) :: tail => if (char == chr) bits else find(tail, char)
       }
     }
@@ -281,7 +282,17 @@ object Huffman {
    * a valid code tree that can be represented as a code table. Using the code tables of the
    * sub-trees, think of how to build the code table for the entire tree.
    */
-  def convert(tree: CodeTree): CodeTable = ???
+  def convert(tree: CodeTree): CodeTable = {
+    def traverse(subtree: CodeTree, bits: List[Bit]) : List[(Char, List[Bit])] = {
+      println(subtree)
+      subtree match {
+        case Leaf(char, weight) => List[(Char, List[Bit])]((char, bits))
+        case Fork(left, right, chars, weight) => traverse(left, bits :+ 0) ::: traverse(right, bits :+ 1)
+      }
+    }
+
+    traverse(tree, List[Bit]())
+  }
 
   /**
    * This function takes two code tables and merges them into one. Depending on how you

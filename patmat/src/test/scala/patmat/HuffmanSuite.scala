@@ -75,4 +75,10 @@ class HuffmanSuite extends FunSuite {
   test("code bits") {
     assert(codeBits(List[(Char, List[Bit])](('a', List(1,1,1)), ('b', List(0,0,0))))('b') === List(0,0,0))
   }
+
+  test ("code tree") {
+      new TestTrees {
+        assert(convert(t1) === List[(Char, List[Bit])](('a', List(0)), ('b', List(1))))
+      }
+  }
 }
