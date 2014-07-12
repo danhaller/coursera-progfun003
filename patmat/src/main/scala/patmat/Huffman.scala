@@ -89,10 +89,10 @@ object Huffman {
       case Nil => List()
       case head :: tail => update(times(tail), head)
     }
-
   }
 
   /**
+
    * Returns a list of `Leaf` nodes for a given frequency table `freqs`.
    *
    * The returned list should be ordered by ascending weights (i.e. the
@@ -192,7 +192,21 @@ object Huffman {
    * This function decodes the bit sequence `bits` using the code tree `tree` and returns
    * the resulting list of characters.
    */
-  def decode(tree: CodeTree, bits: List[Bit]): List[Char] = ???
+  def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
+    def getLetter(subtree: CodeTree, bits: List[Bit]) : List[Char] = {
+      if (bits.isEmpty) List[Char]()
+      else {
+        subtree match {
+          case Leaf(char, weight) => List(char) ::: getLetter(tree, bits.tail)
+          case Fork(left,right,chars,weight) => {
+            if (bits.head == 0) getLetter(left, bits.tail)
+            else getLetter(right, bits.tail)
+          }
+        }
+      }
+    }
+    getLetter(tree, bits)
+  }
 
   /**
    * A Huffman coding tree for the French language.
