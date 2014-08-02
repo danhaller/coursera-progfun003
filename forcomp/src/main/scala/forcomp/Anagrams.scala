@@ -89,7 +89,17 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] = {
+    def reductor(reductee: (Char, Int)) : Occurrences = {
+      reductee match {
+        case (c, i) => if (i == 0) List[(Char, Int)]() else (c, i) :: reductor((c, i-1))
+      }
+    }
+
+    val combosPerLetter = occurrences.map(x => reductor(x))
+
+    combosPerLetter.foldLeft(List[Occurrences](List()))((acc, next) => acc ::: next.map((x) => List[(Char, Int)](x)) ::: acc.flatMap(a => next.map(n => a ::: n :: Nil)))
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    *

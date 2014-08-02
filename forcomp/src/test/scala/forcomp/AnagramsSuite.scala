@@ -49,8 +49,6 @@ class AnagramsSuite extends FunSuite {
     assert(subtract(lard, r) === lad)
   }
 
-
-
   test("combinations: []") {
     assert(combinations(Nil) === List(Nil))
   }
@@ -103,6 +101,6 @@ class AnagramsSuite extends FunSuite {
       List("Linux", "rulez")
     )
     assert(sentenceAnagrams(sentence).toSet === anas.toSet)
-  }  
+  }
 
 }
