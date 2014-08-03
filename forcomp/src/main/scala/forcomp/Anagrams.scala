@@ -36,7 +36,10 @@ object Anagrams {
   def wordOccurrences(w: Word): Occurrences = w.groupBy(x => x.toLower).map { case (c, occurences) => (c, occurences.length) }.toList .sortBy { case (c, occurences) => c }
 
   /** Converts a sentence into its character occurrence list. */
-  def sentenceOccurrences(s: Sentence): Occurrences = wordOccurrences(s.reduce((acc : String, next: String) => acc + next))
+  def sentenceOccurrences(s: Sentence): Occurrences = s match {
+    case Nil => Nil
+    case sentence => wordOccurrences(sentence.reduce((acc : String, next: String) => acc + next))
+  }
 
   /** The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
    *  the words that have that occurrence count.
@@ -111,7 +114,11 @@ object Anagrams {
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
+  def subtract(x: Occurrences, y: Occurrences): Occurrences = {
+    y.foldLeft(x)((acc : Occurrences, next) => acc.map((charocc) => 
+      if (charocc._1 == next._1) (charocc._1, charocc._2 - next._2) else charocc))
+    .filter((charocc) => charocc._2 > 0)
+  }
 
   /** Returns a list of all anagram sentences of the given sentence.
    *
@@ -153,6 +160,20 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    def findAnagrams(occurrences : Occurrences) : List[Sentence] = {
+        occurrences match {
+          case List() => List(List())
+          case occs => for {
+            combination <- combinations(occs)
+            word <- dictionaryByOccurrences.getOrElse(combination, Nil)
+            sentence <- findAnagrams(subtract(occs, wordOccurrences(word)))
+            if !combination.isEmpty
+          } yield word :: sentence
+        }
+    }
+
+    findAnagrams(sentenceOccurrences(sentence))
+  }
 
 }
